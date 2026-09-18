@@ -48,17 +48,19 @@ public class OrderService {
                 .status(OrderStatus.CREATED)
                 .build();
         Order savedOrder = orderRepository.save(order);
-        return toOrderResponse(savedOrder);
+
+        return getOrderResponse(savedOrder, customer, product);
     }
 
-    private OrderResponse toOrderResponse(Order order) {
+    private static OrderResponse getOrderResponse(Order savedOrder, CustomerResponse customer, ProductResponse product) {
         return OrderResponse.builder()
-                .id(order.getId())
-                .customerId(order.getCustomerId())
-                .productId(order.getProductId())
-                .quantity(order.getQuantity())
-                .totalAmount(order.getTotalAmount())
-                .status(order.getStatus())
+                .id(savedOrder.getId())
+                .customer(customer)
+                .productId(product)
+                .quantity(savedOrder.getQuantity())
+                .totalAmount(savedOrder.getTotalAmount())
+                .status(savedOrder.getStatus())
                 .build();
     }
+
 }
