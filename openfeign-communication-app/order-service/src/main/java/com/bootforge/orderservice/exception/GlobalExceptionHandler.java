@@ -4,6 +4,7 @@ import com.bootforge.commons.exception.ErrorResponse;
 import com.bootforge.commons.exception.ErrorResponseBuilder;
 import com.bootforge.commons.exception.customer.CustomerNotFoundException;
 import com.bootforge.commons.exception.customer.CustomerServiceNotAvailableException;
+import com.bootforge.commons.exception.order.OrderNotFoundException;
 import com.bootforge.commons.exception.product.ProductNotFoundException;
 import com.bootforge.commons.exception.product.ProductServiceNotAvailableException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,6 +52,22 @@ public class GlobalExceptionHandler {
                         HttpStatus.NOT_FOUND.value(),
                         HttpStatus.NOT_FOUND.getReasonPhrase(),
                         "Customer not available!!!",
+                        request.getRequestURI()
+                ));
+    }
+
+    @ExceptionHandler({OrderNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleOrderNotFoundException(
+            OrderNotFoundException ex,
+            HttpServletRequest request
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseBuilder.errorBuilder(
+                        HttpStatus.NOT_FOUND.value(),
+                        HttpStatus.NOT_FOUND.getReasonPhrase(),
+                        "Order not found!!!",
                         request.getRequestURI()
                 ));
     }
