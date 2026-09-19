@@ -9,11 +9,9 @@
         <module>product-service</module>
         <module>order-service</module>
         <module>customer-service</module>
-        <module>inventory-service</module>
         <module>commons</module>
         <module>discovery-server</module>
         <module>api-gateway</module>
-        <module>inventory-service</module>
     </modules>
 
     <groupId>com.bootforge</groupId>
