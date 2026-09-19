@@ -13,6 +13,7 @@ import com.bootforge.orderservice.client.CustomerClient;
 import com.bootforge.orderservice.client.ProductClient;
 import com.bootforge.orderservice.entity.Order;
 import com.bootforge.orderservice.repository.OrderRepository;
+import com.bootforge.orderservice.service.kafka.publisher.OrderEventPublisher;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
     private final CustomerClient customerClient;
+    private final OrderEventPublisher orderEventPublisher;
 
     public OrderResponse createOrder(CreateOrderRequest request) {
 
@@ -57,6 +59,9 @@ public class OrderService {
                 .build();
 
         Order savedOrder = orderRepository.save(order);
+
+        //publish OrderCreatedEvent to kafka
+        orderEventPublisher.publishOrder(savedOrder);
 
         return getOrderResponse(savedOrder, customer, product);
     }

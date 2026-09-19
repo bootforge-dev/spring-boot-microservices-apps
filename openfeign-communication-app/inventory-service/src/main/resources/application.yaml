@@ -17,6 +17,27 @@ spring:
         format_sql: true
         highlight_sql: true
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: inventory-group
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.bootforge.commons.event
+        spring.json.value.default.type: "com.bootforge.commons.event.OrderCreatedEvent"
+        spring.json.use.type.headers: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 10
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+
 server:
   port: 9004
 
