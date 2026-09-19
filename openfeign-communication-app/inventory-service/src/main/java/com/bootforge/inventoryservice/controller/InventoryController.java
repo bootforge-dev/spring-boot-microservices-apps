@@ -58,7 +58,7 @@ public class InventoryController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{productId}/reomve-stock")
+    @PostMapping("/{productId}/remove-stock")
     public ResponseEntity<Void> removeStock(
             @PathVariable Long productId,
             @RequestParam
