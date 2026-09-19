@@ -12,7 +12,6 @@ import com.bootforge.commons.exception.product.ProductServiceNotAvailableExcepti
 import com.bootforge.orderservice.client.CustomerClient;
 import com.bootforge.orderservice.client.ProductClient;
 import com.bootforge.orderservice.entity.Order;
-import com.bootforge.orderservice.kafka.OrderEventPublisher;
 import com.bootforge.orderservice.repository.OrderRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
     private final CustomerClient customerClient;
-    private final OrderEventPublisher orderEventPublisher;
 
     public OrderResponse createOrder(CreateOrderRequest request) {
 
@@ -59,8 +57,6 @@ public class OrderService {
                 .build();
 
         Order savedOrder = orderRepository.save(order);
-
-        orderEventPublisher.publishOrderCreated(savedOrder);
 
         return getOrderResponse(savedOrder, customer, product);
     }
