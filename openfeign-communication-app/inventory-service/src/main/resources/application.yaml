@@ -1,12 +1,16 @@
 spring:
   application:
     name: inventory-service
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b034dd (implemented inventory service)
   datasource:
     url: jdbc:mysql://localhost:3306/inventory_db
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+<<<<<<< HEAD
 
   jpa:
     hibernate:
@@ -29,6 +33,18 @@ spring:
         spring.json.use.type.headers: false
     listener:
       ack-mode: record
+=======
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+>>>>>>> 2b034dd (implemented inventory service)
 
 server:
   port: 9004
@@ -40,4 +56,8 @@ eureka:
     service-url:
       default-zone: http://localhost:8761/
   instance:
+<<<<<<< HEAD
     prefer-ip-address: true
+=======
+    prefer-ip-address: true
+>>>>>>> 2b034dd (implemented inventory service)
