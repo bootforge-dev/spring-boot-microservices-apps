@@ -54,3 +54,6 @@ management:
   endpoint:
     health:
       show-details: always
+  health:
+    circuitbreakers:
+      enabled: true

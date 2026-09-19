@@ -73,10 +73,12 @@ public class OrderService {
     }
 
     private ProductResponse getProductFallback(Long productId, Throwable th){
+        System.out.println( "Product Service fallback executed. " + "productId=" + productId + ", error=" + th.getMessage() );
         throw new ProductServiceNotAvailableException("Product service is currently unavailable");
     }
 
     private CustomerResponse getCustomerFallback(Long customerId, Throwable th){
+        System.out.println( "Customer Service fallback executed. " + "customerId=" + customerId + ", error=" + th.getMessage() );
         throw new CustomerServiceNotAvailableException("Customer service is currently unavailable");
     }
 

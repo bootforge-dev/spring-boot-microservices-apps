@@ -39,8 +39,8 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler({CustomerNotFoundException.class, ProductNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handleNotFoundException(
+    @ExceptionHandler({CustomerNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleCustomerNotFoundException(
             CustomerNotFoundException ex,
             HttpServletRequest request
     ) {
@@ -50,13 +50,29 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponseBuilder.errorBuilder(
                         HttpStatus.NOT_FOUND.value(),
                         HttpStatus.NOT_FOUND.getReasonPhrase(),
-                        "Resource not available!!!",
+                        "Customer not available!!!",
                         request.getRequestURI()
                 ));
     }
 
-    @ExceptionHandler({CustomerServiceNotAvailableException.class, ProductServiceNotAvailableException.class})
-    public ResponseEntity<ErrorResponse> handleServiceNotFoundException(
+    @ExceptionHandler({ProductNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(
+            ProductNotFoundException ex,
+            HttpServletRequest request
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseBuilder.errorBuilder(
+                        HttpStatus.NOT_FOUND.value(),
+                        HttpStatus.NOT_FOUND.getReasonPhrase(),
+                        "Product not available!!!",
+                        request.getRequestURI()
+                ));
+    }
+
+    @ExceptionHandler(CustomerServiceNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> handleCustomerServiceNotFoundException(
             CustomerServiceNotAvailableException ex,
             HttpServletRequest request
     ) {
@@ -66,7 +82,23 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponseBuilder.errorBuilder(
                         HttpStatus.SERVICE_UNAVAILABLE.value(),
                         HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
-                        "Service is not available!!!",
+                        "Customer Service is not available!!!",
+                        request.getRequestURI()
+                ));
+    }
+
+    @ExceptionHandler(ProductServiceNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> handleProductServiceNotAvailableException(
+            ProductServiceNotAvailableException ex,
+            HttpServletRequest request
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ErrorResponseBuilder.errorBuilder(
+                        HttpStatus.SERVICE_UNAVAILABLE.value(),
+                        HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
+                        "Product Service is not available!!!",
                         request.getRequestURI()
                 ));
     }
