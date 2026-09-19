@@ -3,7 +3,9 @@ package com.bootforge.orderservice.exception;
 import com.bootforge.commons.exception.ErrorResponse;
 import com.bootforge.commons.exception.ErrorResponseBuilder;
 import com.bootforge.commons.exception.customer.CustomerNotFoundException;
+import com.bootforge.commons.exception.customer.CustomerServiceNotAvailableException;
 import com.bootforge.commons.exception.product.ProductNotFoundException;
+import com.bootforge.commons.exception.product.ProductServiceNotAvailableException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,22 @@ public class GlobalExceptionHandler {
                         HttpStatus.NOT_FOUND.value(),
                         HttpStatus.NOT_FOUND.getReasonPhrase(),
                         "Resource not available!!!",
+                        request.getRequestURI()
+                ));
+    }
+
+    @ExceptionHandler({CustomerServiceNotAvailableException.class, ProductServiceNotAvailableException.class})
+    public ResponseEntity<ErrorResponse> handleServiceNotFoundException(
+            CustomerServiceNotAvailableException ex,
+            HttpServletRequest request
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ErrorResponseBuilder.errorBuilder(
+                        HttpStatus.SERVICE_UNAVAILABLE.value(),
+                        HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
+                        "Service is not available!!!",
                         request.getRequestURI()
                 ));
     }
