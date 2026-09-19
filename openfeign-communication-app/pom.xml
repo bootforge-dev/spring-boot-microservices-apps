@@ -12,6 +12,7 @@
         <module>commons</module>
         <module>discovery-server</module>
         <module>api-gateway</module>
+        <module>inventory-service</module>
     </modules>
 
     <groupId>com.bootforge</groupId>
