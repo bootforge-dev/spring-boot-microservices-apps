@@ -4,8 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record OrderCreatedEvent(
-        Long orderId,
-        Long productId,
-        Integer quantity
+        String aggregatedId,
+        String payload
 ) {
 }

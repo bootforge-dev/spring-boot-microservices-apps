@@ -3,11 +3,13 @@ package com.bootforge.service;
 import com.bootforge.dto.CreateOrderRequest;
 import com.bootforge.dto.OrderResponse;
 import com.bootforge.entity.Order;
-import com.bootforge.kafka.producer.OrderEventProducer;
+import com.bootforge.entity.Outbox;
 import com.bootforge.repository.OrderRepository;
+import com.bootforge.repository.OutboxRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 
@@ -16,22 +18,30 @@ import java.math.BigDecimal;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderEventProducer orderProducer;
+    private final OutboxRepository outboxRepository;
+
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request) {
-        BigDecimal totalAmount = BigDecimal.valueOf(100).multiply(
+        BigDecimal totalAmount = request.price().multiply(
                 BigDecimal.valueOf(request.quantity())
         );
         Order order = Order.builder()
-                .productId(request.productId())
+                .name(request.name())
+                .customerId(request.customerId())
+                .productType(request.productType())
+                .price(request.price())
                 .quantity(request.quantity())
                 .totalAmount(totalAmount)
                 .build();
         Order savedOrder = orderRepository.save(order);
 
-        //sent OrderCreatedEvent to kafka topic
-        orderProducer.publishOrder(savedOrder);
+        Outbox outbox = Outbox.builder()
+                .aggregateId(order.getId().toString())
+                .payload(new ObjectMapper().writeValueAsString(savedOrder))
+                .processed(false)
+                .build();
+        outboxRepository.save(outbox);
 
         return toOrderResponse(savedOrder);
     }
@@ -40,8 +50,11 @@ public class OrderService {
 
         return OrderResponse.builder()
                 .id(order.getId())
-                .productId(order.getProductId())
+                .name(order.getName())
+                .customerId(order.getCustomerId())
+                .productType(order.getProductType())
                 .quantity(order.getQuantity())
+                .price(order.getPrice())
                 .totalAmount(order.getTotalAmount())
                 .createdAt(order.getCreatedAt())
                 .build();

@@ -19,12 +19,21 @@ public class Order {
     private Long id;
 
     @Column(nullable = false)
-    private Long productId;
+    private String name;
+
+    @Column(nullable = false)
+    private Long customerId;
+
+    @Column(nullable = false)
+    private String productType;
 
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false,precision = 19,scale = 2)
+    @Column(nullable = false,precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal totalAmount;
 
     @Column(nullable = false, updatable = false)
